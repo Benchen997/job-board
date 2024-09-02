@@ -1,0 +1,50 @@
+type Query {
+  # jobs query want to fetch many jobs, not individual job, so it
+  # is should be set it as an array.
+  jobs: [Job!]
+  """
+  This query returns specific job, the id is non-nullable
+  which means client must give id
+  """
+  job(id: ID!): Job
+  company(id:ID!): Company
+}
+
+type Mutation {
+    """ create new job post for user's company """
+    createJob(input: CreateJobInput!):Job
+    deleteJob(id:ID!):Job
+    updateJob(input: UpdateJobInput):Job
+}
+
+"""
+Represents a job AD posted to our board
+"""
+type Job {
+  id: ID!
+  title: String!
+  description: String
+  """
+  the date when the job created at, in ISO-8601 format, E.g. `2022-12-31`.
+  """
+  date: String!
+  company: Company!
+}
+
+type Company {
+  id: ID!
+  name: String!
+  description: String
+  jobs:[Job!]
+}
+
+""" the schema for input of creating a new job """
+input CreateJobInput {
+    title: String!
+    description: String
+}
+input UpdateJobInput {
+    id:ID!
+    title: String!
+    description: String
+}
